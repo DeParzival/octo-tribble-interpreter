@@ -1,6 +1,7 @@
 package compiler;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static compiler.TokenType.*;
@@ -15,22 +16,39 @@ public class Parser {
         this.tokens=tokens;
     }
 
-    Expr parse(){
-        try{
-            return expression();
+    List<Stmt> parse(){
+        List<Stmt> statemments=new ArrayList<>();
+        while(!isAtEnd()){
+            statemments.add(statement());
         }
-        catch(ParseError error){
-            return null;
-        }
+        return statemments;
     }
 
     //Grammar rules starts here
 
-    
     //1st rule
     //Grammar for expression is expression -> equality
     private Expr expression(){
         return equality();
+    }
+
+    private Stmt statement(){
+        if(match(PRINT))
+            return printStatemtent();
+
+        return expressionStatement();
+    }
+
+    private Stmt printStatemtent(){
+        Expr value=expression();
+        consume(SEMICOLON,"Expect ';' after value." );
+        return new Stmt.Print(value);
+    }
+
+    private Stmt expressionStatement(){
+        Expr value=expression();
+        consume(SEMICOLON,"Expect ';' after expression");
+        return new Stmt.Expression(value);
     }
 
     //2nd Rule

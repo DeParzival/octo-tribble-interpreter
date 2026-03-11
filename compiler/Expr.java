@@ -1,6 +1,5 @@
 package compiler;
 
-
 abstract class Expr{
     interface Visitor<R> {
     R visitBinaryExpr(Binary expr);
