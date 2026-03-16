@@ -1,5 +1,11 @@
-fun add(a,b){
-    return a+b;
+fun makeCounter() {
+var i = 0;
+fun count() {
+i = i + 1;
+print i;
 }
-
-print add(2,3);
+return count;
+}
+var counter = makeCounter();
+counter(); // "1".
+counter(); // "2".
