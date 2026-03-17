@@ -75,6 +75,12 @@ public class Lox{
         //Output of the Parser
         //System.out.println(new AstPrinter().print(expression));
 
+        Resolver resolver=new Resolver(interpreter);
+        resolver.resolve(statements);
+
+        if(hadError)
+            return;
+
         //Prints the result after evaluation
         //Outpuut of the Interpreter
         interpreter.interpret(statements);
