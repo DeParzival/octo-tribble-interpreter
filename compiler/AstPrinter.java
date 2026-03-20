@@ -50,6 +50,21 @@ class AstPrinter implements Expr.Visitor<String> {
         return parenthesize("call", expr.callee);
     }
 
+    @Override
+    public String visitGetExpr(Expr.Get expr) {
+        return parenthesize(".", expr.object, new Expr.Variable(expr.name));
+    }
+
+    @Override
+    public String visitSetExpr(Expr.Set expr) {
+        return parenthesize("= " + expr.name.lexeme,expr.object, expr.value);
+    }
+
+    @Override
+    public String visitThisExpr(Expr.This expr) {
+        return "this";
+    }
+
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 
