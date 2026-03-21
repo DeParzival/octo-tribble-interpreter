@@ -1,7 +1,13 @@
-class Foo {
-init() {
-print this;
+class Doughnut {
+cook() {
+print "Fry until golden brown.";
+inner();
+print "Place in a nice box.";
 }
 }
-var foo = Foo();
-print foo.init();
+class BostonCream < Doughnut {
+cook() {
+print "Pipe full of custard and coat with chocolate.";
+}
+}
+BostonCream().cook();
