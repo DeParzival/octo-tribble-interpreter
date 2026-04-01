@@ -45,7 +45,7 @@ static char* readFile(const char* path){
         exit(74);
     }
 
-    buffer[bytesRead]="\0";
+    buffer[bytesRead]='\0';
 
     fclose(file);
     return buffer;
@@ -71,7 +71,7 @@ int main(int argc, const char* argv[]){
     else if(argc==2)
         runFile(argv[1]);
     else{
-        fprint(stderr, "usage: clox [path]\n");
+        fprintf(stderr, "usage: clox [path]\n");
         exit(64);
     }
     

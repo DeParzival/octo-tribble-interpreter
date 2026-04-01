@@ -18,6 +18,8 @@ void initScanner(const char* source){
     scanner.line=1;
 }
 
+static TokenType identifierType();
+
 static bool isAlpha(char c){
     return (c>='A' && c<='Z') || (c>='a' && c<='z') || c=='_';
 }
@@ -27,7 +29,7 @@ static bool isDigit(char c){
 }
 
 static bool isAtEnd(){
-    return *scanner.current=="\0";
+    return *scanner.current=='\0';
 }
 
 static char advance(){
@@ -93,7 +95,7 @@ static void skipWhiteSpace(){
                 break;
 
             case '/':
-                if(peekNext=='/'){
+                if(peekNext()=='/'){
                     while(peek()!='\n' && !isAtEnd()){
                         advance();
                     }
@@ -157,7 +159,7 @@ static Token identifier(){
     while(isAlpha(peek()) || isDigit(peek()))
         advance();
 
-    return makeToken(identiferType());
+    return makeToken(identifierType());
 }
 
 static Token number(){
