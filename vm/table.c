@@ -140,7 +140,7 @@ static void adjustCapacity(Table* table, int capacity){
 
     //Building a new hash table and copying the exisiting values on the new one
     table->count=0;
-    for(int i=0;i<capacity;i++){
+    for(int i=0;i<table->capacity;i++){
         Entry* entry=&table->entries[i];
         if(entry->key==NULL)
             continue;
