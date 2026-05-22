@@ -112,7 +112,6 @@ static InterpretResult run(){
         switch(instruction=READ_BYTE()){
             case OP_CONSTANT:{
                 Value constant=READ_CONSTANT();
-                printValue(constant);
                 push(constant);
                 break;
             }
@@ -220,6 +219,18 @@ static InterpretResult run(){
                     return INTERPRET_RUNTIME_ERROR;
                 }
                 break;}
+
+            case OP_GET_LOCAL:{
+                uint8_t slot=READ_BYTE();
+                push(vm.stack[slot]);
+                break;
+            }
+
+            case OP_SET_LOCAL:{
+                uint8_t slot=READ_BYTE();
+                vm.stack[slot]=peek(0);
+                break;
+            }
 
             case OP_PRINT:{
                 printValue(pop());
