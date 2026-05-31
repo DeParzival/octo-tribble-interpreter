@@ -46,7 +46,15 @@ typedef struct{
     int depth;
 } Local;
 
+typedef enum{
+    TYPE_FUNCTION,
+    TYPE_SCRIPT
+} FunctionType;
+
 typedef struct{
+    ObjFunction* function;
+    FunctionType type;
+
     Local locals[UINT8_COUNT];
     int localCount;
     int scopeDepth;
@@ -57,7 +65,7 @@ Compiler* current=NULL;
 Chunk* compilingChunk;
 
 static Chunk* currentChunk(){
-    return compilingChunk;
+    return &current->function->chunk;
 }
 
 static uint8_t identifierConstant(Token* name);
@@ -183,20 +191,31 @@ static void patchJump(int offset){
     currentChunk()->code[offset+1]=jump & 0xff;
 }
 
-static void initCompiler(Compiler* compiler){
+static void initCompiler(Compiler* compiler, FunctionType type){
+    compiler->function=NULL;
+    compiler->type=type;
     compiler->localCount=0;
     compiler->scopeDepth=0;
+    compiler->function=newFunction();
     current=compiler;
+
+    Local* local=&current->locals[current->localCount++];
+    local->depth=0;
+    local->name.start="";
+    local->name.length=0;
 }
 
-static void endCompiler(){
+static ObjFunction* endCompiler(){
     emitReturn();
+    ObjFunction* function=current->function;
 
 #ifdef DEBUG_PRINT_CODE
     if(!parser.hadError){
-        disassembleChunk(currentChunk(), "code");
+        disassembleChunk(currentChunk(), function->name!=NULL?function->name->chars:"<script>");
     }
 #endif
+
+    return function;
 }
 
 static void beginScope(){
@@ -500,6 +519,9 @@ static uint8_t parseVariable(const char* errorMessage){
 }
 
 static void markInitialized(){
+    if(current->scopeDepth==0)
+        return;
+
     current->locals[current->localCount-1].depth=current->scopeDepth;
 }
 
@@ -526,6 +548,29 @@ static void block(){
     }
 
     consume(TOKEN_RIGHT_BRACE, "Expect '}' after block.");
+}
+
+static void function(FunctionType type){
+    Compiler compiler;
+    initCompiler(&compiler, type);
+    beginScope();
+
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after function name.");
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after parameters.");
+
+    consume(TOKEN_LEFT_BRACE, "Expect '{' after functin body.");
+    block();
+
+    //Creating the function object
+    ObjFunction* function=endCompiler();
+    emitBytes(OP_CONSTANT, makeConstant(OBJ_VAL(function)));
+}
+
+static void funDeclaration(){
+    uint8_t global=parseVariable("Expect function name.");
+    markInitialized();
+    function(TYPE_FUNCTION);
+    defineVariable(global);
 }
 
 static void varDeclaration(){
@@ -672,7 +717,9 @@ static void synchronize(){
 
 static void declaration(){
 
-    if(match(TOKEN_VAR))
+    if(match(TOKEN_FUN))
+        funDeclarataion();
+    else if(match(TOKEN_VAR))
         varDeclaration();
 
     else
@@ -700,11 +747,10 @@ static void statement(){
         expressionStatement();
 }
 
-bool compile(const char* source, Chunk* chunk){
+ObjFunction* compile(const char* source){
     initScanner(source);
     Compiler compiler;
-    initCompiler(&compiler);
-    compilingChunk=chunk;
+    initCompiler(&compiler,TYPE_SCRIPT);
 
     parser.hadError=false;
     parser.panicMode=false;
@@ -714,7 +760,6 @@ bool compile(const char* source, Chunk* chunk){
     while(!match(TOKEN_EOF))
         declaration();
 
-    endCompiler();
-    current=NULL;
-    return !parser.hadError;
+    ObjFunction* function=endCompiler();
+    return parser.hadError?NULL:function;
 }
