@@ -19,10 +19,17 @@ vm.objects=object;
 return object;
 }
 
+ObjClosure* newClosure(ObjFunction* function){
+    ObjClosure* closure=ALLOCATE_OBJ(ObjClosure, OBJ_CLOSURE);
+    closure->function=function;
+    return closure;
+}
+
 ObjFunction* newFunction(){
     ObjFunction* function=ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
 
     function->arity=0;
+    function->upvaluecount=0;
     function->name=NULL;
     initChunk(&function->chunk);
     return function;
@@ -100,6 +107,10 @@ void printObj(Value value){
 
         case OBJ_FUNCTION:
             printFunction(AS_FUNCTION(value));
+            break;
+
+        case OBJ_CLOSURE:
+            printFunction(AS_CLOSURE(value));
             break;
 
         case OBJ_NATIVE:
