@@ -13,6 +13,7 @@ typedef enum{
     OP_POP,
     OP_DEFINE_GLOBAL,
     OP_CLOSURE,
+    OP_CLOSE_UPVALUE,
     OP_CALL,    
     OP_ADD,
     OP_SUBTRACT,
