@@ -90,6 +90,25 @@ ObjString* tableFindString(Table* table, const char* chars, int length, uint32_t
     }
 }
 
+void tableRemoveWhite(Table* table){
+    for(int i=0;i<table->capacity;i++){
+        Entry* entry=&table->entries[i];
+        
+        //If the string is not null and is unmarked and scheduled for execution by the sweeper
+        if(entry->key!=NULL && !entry->key->obj.isMarked)
+            //Wiping the key/value pair before the sweeper cleans it
+            tableDelete(table, entry->key);
+    }
+}
+
+void markTable(Table* table){
+    for(int i=0;i<table->capacity;i++){
+        Entry* entry=&table->entries[i];
+        markObject((Obj*)entry->key);
+        markValue(entry->value);
+    }
+}
+
 static Entry* findEntry(Entry* entries, int capacity, ObjString* key){
     uint32_t index=key->hash%capacity;
     Entry* tombstone=NULL;

@@ -11,16 +11,22 @@
 (type*)allocateObject(sizeof(type), objectType)
 
 static Obj* allocateObject(size_t size, ObjType type) {
-Obj* object = (Obj*)reallocate(NULL, 0, size);
-object->type = type;
+    Obj* object = (Obj*)reallocate(NULL, 0, size);
+    object->type = type;
+    object->isMarked=false;
 
-object->next=vm.objects;
-vm.objects=object;
-return object;
+    object->next=vm.objects;
+    vm.objects=object;
+
+#ifdef DEBUG_LOG_GC
+    printf("%p allocate %ld for %d\n", (void*)object, size, type);
+#endif
+
+    return object;
 }
 
 ObjClosure* newClosure(ObjFunction* function){
-    ObjUpvalue** upvalues=ALLOCATE_OBJ(ObjUpvalue*, function->upvaluecount);
+    ObjUpvalue** upvalues=ALLOCATE(ObjUpvalue*, function->upvaluecount);
 
     for(int i=0;i<function->upvaluecount;i++)
         upvalues[i]=NULL;
@@ -54,7 +60,9 @@ static ObjString* allocateString(const char* chars, int length, uint32_t hash){
     string->chars=(char*)chars;
     string->hash=hash;
 
+    push(OBJ_VAL(string));
     tableSet(&vm.strings, string, NIL_VAL);
+    pop();
 
     return string;
 }
