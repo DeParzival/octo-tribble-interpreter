@@ -129,7 +129,7 @@ gcc *.c -o clox
 ### Tree-Walk Interpreter (jlox)
 
 ```bash
-cd compiler
+cd treewalk
 javac *.java
 ```
 
@@ -145,7 +145,7 @@ cd vm
 ### Java Interpreter
 
 ```bash
-cd compiler
+cd treewalk
 java Lox ../test.lox
 ```
 
