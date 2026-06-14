@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 class Token{
     final TokenType type;

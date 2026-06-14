@@ -1,11 +1,11 @@
-package compiler;
+package treewalk;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static compiler.TokenType.*;
+import static treewalk.TokenType.*;
 
 class Scanner {
     private final String source;

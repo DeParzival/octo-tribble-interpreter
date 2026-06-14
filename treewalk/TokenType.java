@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 enum TokenType {
     //Single-char tokens

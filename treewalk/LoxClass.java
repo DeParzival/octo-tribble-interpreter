@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 import java.util.List;
 import java.util.Map;

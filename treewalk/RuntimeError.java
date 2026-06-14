@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 class RuntimeError extends RuntimeException{
     final Token token;

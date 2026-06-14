@@ -1,11 +1,11 @@
-package compiler;
+package treewalk;
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static compiler.TokenType.*;
+import static treewalk.TokenType.*;
 
 public class Parser {
     private static class ParseError extends RuntimeException{};

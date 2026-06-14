@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
 //Printer code comes here
 //A Printer is used to check if the syntax tree we produced is correct or wrong
-package compiler;
+package treewalk;
 
 class AstPrinter implements Expr.Visitor<String> {
 

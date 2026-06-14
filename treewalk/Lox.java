@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static compiler.TokenType.*;
+import static treewalk.TokenType.*;
 
 
 public class Lox{

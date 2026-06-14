@@ -1,4 +1,4 @@
-package compiler;
+package treewalk;
 
 class Return extends RuntimeException{
     final Object value;
