@@ -9,7 +9,7 @@ This project explores how modern language runtimes work under the hood, from lex
 ## Repository Structure
 
 ```text
-compiler/  -> Tree-walk interpreter (jlox)
+treewalk/  -> Tree-walk interpreter (jlox)
 vm/        -> Bytecode compiler and virtual machine (clox)
 tool/      -> AST generation utilities
 ```
