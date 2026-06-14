@@ -6,9 +6,20 @@ This project explores how modern language runtimes work under the hood, from lex
 
 ---
 
+## Repository Structure
+
+```text
+compiler/  -> Tree-walk interpreter (jlox)
+vm/        -> Bytecode compiler and virtual machine (clox)
+tool/      -> AST generation utilities
+```
+
 ## Architecture
 
-![Architecture](assets/architecture.png)
+![Architecture](assets/Architecture.png)
+
+---
+
 
 ## Highlights
 
@@ -28,30 +39,9 @@ This project explores how modern language runtimes work under the hood, from lex
 
 ## Architecture
 
-```text
-Source Code
-     │
-     ▼
-  Scanner
-     │
-     ▼
-   Tokens
-     │
-     ▼
- Pratt Parser
-     │
-     ▼
-  Compiler
-     │
-     ▼
-  Bytecode
-     │
-     ▼
- Virtual Machine
-     │
-     ▼
- Program Output
-```
+The VM follows a traditional language implementation pipeline:
+
+**Source Code → Scanner → Pratt Parser → Compiler → Bytecode → Virtual Machine → Output**
 
 ### Scanner
 
@@ -131,37 +121,31 @@ woof
 
 ### Bytecode Virtual Machine (clox)
 
-From the `vm/` directory:
-
 ```bash
+cd vm
 gcc *.c -o clox
 ```
 
 ### Tree-Walk Interpreter (jlox)
 
 ```bash
+cd compiler
 javac *.java
 ```
 
----
-
 ## Running
 
-### Run a Lox Program with the VM
+### VM
 
 ```bash
+cd vm
 ./clox.exe ../test.lox
 ```
 
-### Start the VM REPL
+### Java Interpreter
 
 ```bash
-./clox.exe
-```
-
-### Run the Java Interpreter
-
-```bash
+cd compiler
 java Lox ../test.lox
 ```
 
