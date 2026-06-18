@@ -47,6 +47,7 @@ void initVM();
 void freeVM();
 InterpretResult interpret(const char* source);
 void push(Value value);
+void defineNative(const char* name, NativeFn function);
 Value pop();
 
 #endif
